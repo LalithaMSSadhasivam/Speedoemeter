@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">SPEEDOMETER</string>
+    <string name="initial_speed"> 0 </string>
+    <string name="speed_unit">KMPH</string>
+    <!--    <string name="initial_time"> 00:00 AM </string>-->
+    <string name="initial_place">Location Detecting...</string>
+    <string name="initial_date">Date : Time</string>
+    <string name="digital_clock">DigitalClock</string>
+    <string name="title_activity_maps">MapsActivity</string>
+</resources>

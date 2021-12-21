@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_background"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="360dp"
+        android:layout_height="193dp"
+        android:layout_gravity="center"
+        android:background="@drawable/box_shape"
+        android:fontFamily="sans-serif-black"
+        android:text="@string/initial_speed"
+        android:textAlignment="center"
+        android:textColor="#ff0000"
+        android:textSize="75sp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.50"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.048" />
+
+    <TextView
+        android:id="@+id/speedUnit"
+        android:layout_width="86dp"
+        android:layout_height="33dp"
+        android:layout_gravity="center"
+        android:fontFamily="sans-serif-black"
+        android:text="@string/speed_unit"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.50"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.221" />
+
+    <!--    <CalendarView-->
+<!--        android:layout_width="354dp"-->
+<!--        android:layout_height="271dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.494"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="0.685" />-->
+
+
+<!--    <DigitalClock-->
+<!--        android:id="@+id/digitalClock"-->
+<!--        android:layout_width="341dp"-->
+<!--        android:layout_height="58dp"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:background="@drawable/box_shape"-->
+<!--        android:fontFamily="sans-serif-black"-->
+<!--        android:text="@string/digital_clock"-->
+<!--        android:textAlignment="center"-->
+<!--        android:textColor="#000000"-->
+<!--        android:textSize="35sp"-->
+<!--        android:visibility="visible"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="0.362" />-->
+
+    <TextView
+        android:id="@+id/text_date_display"
+        android:layout_width="360dp"
+        android:layout_height="93dp"
+        android:layout_gravity="center"
+        android:background="@drawable/box_shape"
+        android:fontFamily="sans-serif-black"
+        android:text="@string/initial_date"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="30sp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.50"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.384" />
+
+<!--    <TextView-->
+<!--        android:id="@+id/textWeather"-->
+<!--        android:layout_width="360dp"-->
+<!--        android:layout_height="244dp"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:background="@drawable/box_shape"-->
+<!--        android:fontFamily="sans-serif-black"-->
+<!--        android:text="@string/initial_speed"-->
+<!--        android:textAlignment="center"-->
+<!--        android:textColor="#ff0000"-->
+<!--        android:textSize="75sp"-->
+<!--        android:visibility="visible"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.504"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="0.729" />-->
+
+        <FrameLayout
+            android:id="@+id/MapsFrame"
+            android:layout_width="360dp"
+            android:layout_height="244dp"
+            android:layout_gravity="center"
+            android:background="@drawable/box_shape"
+            android:fontFamily="sans-serif-black"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.504"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.729" />
+
+
+
+    <TextView
+        android:id="@+id/textLocation"
+        android:layout_width="360dp"
+        android:layout_height="72dp"
+        android:layout_gravity="center"
+        android:background="@drawable/box_shape"
+        android:fontFamily="sans-serif-black"
+        android:text="@string/initial_place"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="23sp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.50"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.952" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
