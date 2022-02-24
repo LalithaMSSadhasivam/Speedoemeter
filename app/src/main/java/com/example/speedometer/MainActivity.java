@@ -8,6 +8,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -35,16 +36,41 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity implements LocationListener {
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
+
+public class MainActivity extends AppCompatActivity implements LocationListener, OnMapReadyCallback {
+    private MapView mapView;
+    private static final String MAP_VIEW_BUNDLE_KEY = "MapViewBundleKey";
+    double latitude;
+    double longitude;
+    GoogleMap mMap;
+    private Polyline gpsTrack;
+
+    //    , OnMapReadyCallback
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         // Date display
         setDate();
+        //Map
+        Bundle mapViewBundle = null;
+        if (savedInstanceState != null) {
+            mapViewBundle = savedInstanceState.getBundle(MAP_VIEW_BUNDLE_KEY);
+        }
+        mapView = findViewById(R.id.map);
+        mapView.onCreate(mapViewBundle);
         //added because new access fine location policies, imported class..
-        //ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         //check permission
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // Permission is not granted
@@ -58,24 +84,18 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     @Override
     public void onLocationChanged(Location location) {
         TextView txt = (TextView) this.findViewById(R.id.textView);
-    //        Address
         TextView txtAddress = (TextView) this.findViewById(R.id.textLocation);
-//        TextView txtWeather = (TextView) this.findViewById(R.id.textWeather);
-        double latitude=location.getLatitude();
-        double longitude=location.getLongitude();
+        latitude=location.getLatitude();
+        longitude=location.getLongitude();
         if (location == null) {
-            //  Speed
-            //  txt.setText("-.- km/h");
-            txt.setText("");
-            //  Address
+
+            txt.setText("");   //  Speed - txt.setText("-.- km/h");
             txtAddress.setText("");
-            // Weather
 
         } else {
-            // Speed Calculation
+
             float nCurrentSpeed = location.getSpeed() * 3.6f;
-    //            txt.setText(String.format("%.2f", nCurrentSpeed)+ " km/h" );
-            // Address Display
+            //            txt.setText(String.format("%.2f", nCurrentSpeed)+ " km/h" );
             Geocoder geocoder = new Geocoder(this, Locale.getDefault());
             List<Address> addresses = null;
             try {
@@ -85,45 +105,19 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             }
             String address =
                     addresses.get(0).getAddressLine(0);
-
-//            //Weather Display - Logic
-//            RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-//          String url = "https://api.openweathermap.org/data/2.5/weather?lat="+location.getLatitude()+"&lon="+location.getLongitude()+"&appid=76521916532457ce34d3a85912ee7774";
-//
-//            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url,null, new Response.Listener<JSONObject>() {
-//
-//
-//                @Override
-//                public void onResponse(JSONObject response) {
-//
-//                    try {
-//                        JSONObject array= (JSONObject) response.get("main");
-//                        //JSONArray array=  response.getJSONArray("main");
-//                        Double t=Float.parseFloat(array.getString("temp"))-273.15;
-//                        txtWeather.setText(String.format("%.0f", t));
-//                        //Toast.makeText(getApplicationContext(),s,Toast.LENGTH_LONG).show();
-//                    } catch (JSONException e) {
-//                        txtWeather.setText(e.getMessage());
-//                        e.printStackTrace();
-//                    }
-//
-//                }
-//            }, new Response.ErrorListener() {
-//                @Override
-//                public void onErrorResponse(VolleyError error) {
-//
-//                    txtWeather.setText(error.toString());
-//                    Toast.makeText(getApplicationContext(),error.toString(),Toast.LENGTH_SHORT).show();
-//                }
-//            });
-//            queue.add(request);
-
+            mapView.getMapAsync(this);
             txtAddress.setText(address);
             txt.setText(String.format("%.0f", nCurrentSpeed));
         }
+        if( gpsTrack != null)
+        {
+            LatLng lastKnownLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+            List<LatLng> points = gpsTrack.getPoints();
+            points.add(lastKnownLatLng);
+            gpsTrack.setPoints(points);
+        }
 
 //            Toast.makeText(getApplicationContext(),"Lat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
-
     }
 
     @Override
@@ -142,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     //GPS location access permission
     @SuppressLint("MissingPermission")
     private void doStuff() {
-     LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         if (locationManager != null) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
@@ -151,6 +145,17 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             // this.onLocationChanged(null);
         }
         Toast.makeText(this, "Waiting for GPS connection!", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Bundle mapViewBundle = outState.getBundle(MAP_VIEW_BUNDLE_KEY);
+        if (mapViewBundle == null) {
+            mapViewBundle = new Bundle();
+            outState.putBundle(MAP_VIEW_BUNDLE_KEY, mapViewBundle);
+        }
+        mapView.onSaveInstanceState(mapViewBundle);
     }
 
     //Date Display function
@@ -162,7 +167,30 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         dateTimeDisplay.setText(date);
     }
 
+    @SuppressLint("MissingPermission")
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
 
+        UiSettings uiSettings = mMap.getUiSettings();
+        uiSettings.setMyLocationButtonEnabled(true);
+//        uiSettings.setCompassEnabled(true);
+//        MarkerOptions options =new MarkerOptions().position(new LatLng(latitude,longitude)).;
+//        mMap.addMarker(options);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude,longitude),18.0f));
+
+
+
+        PolylineOptions polylineOptions = new PolylineOptions();
+        polylineOptions.color(Color.CYAN);
+        polylineOptions.width(4);
+        gpsTrack = mMap.addPolyline(polylineOptions);
+
+
+        //mMap.addPolyline()
+        mMap.setMyLocationEnabled(true);
+
+    }
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
@@ -175,4 +203,5 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     @Override
     public void onProviderDisabled(String provider) {
     }
+
 }
